@@ -48,13 +48,13 @@
             // Check if the server is online
             if (data.online) {
               const statusInfo = `
-                <p class="text-2xl mb-4 font-light">[🟢] Server sedang online</p>
-                <p class="text-2xl mb-4 font-light">[👤] Pemain online: ${data.players.now} / ${data.players.max}</p>
+                <p class="text-xl mb-4 font-light">[🟢] Server sedang online</p>
+                <p class="text-xl mb-4 font-light">[👤] Pemain online: ${data.players.now} / ${data.players.max}</p>
               `;
               // Set the server status information in the div
               statusDiv.innerHTML = statusInfo;
             } else {
-              statusDiv.innerHTML = '<p class="text-2xl mb-4 font-light">[🔴] Server sedang offline.</p>';
+              statusDiv.innerHTML = '<p class="text-xl mb-4 font-light">[🔴] Server sedang offline.</p>';
             }
           })
           .catch(error => {
