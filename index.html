@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Server BoniCore PMMP</title>
+    <meta property="og:title" content="Status Server BoniCore PMMP" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://status.bonicore.my.id/" />
+    <meta property="og:image" content="https://status.bonicore.my.id/assets/logo.png" />
+    <meta property="og:description" content="Status Server BoniCore (https://status.bonicore.my.id/)" />
+    <meta name="theme-color" content="#FF0000">
+    <script src="https://cdn.tailwindcss.com/"></script>
+    <meta name="twitter:card" content="summary_large_image">
+    <style>
+        /* Custom styles here */
+        .center-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body class="bg-slate-800">
+<div class="center-content"> <!-- Added center-content class here -->
+    <div class="w-1/2 bg-gray-900 p-8 text-white">
+        <h1 class="text-6xl font-bold mb-4">Status BoniCore</h1>
+        <p class="text-2xl mb-4 font-light">Ini adalah halaman status untuk server BoniCore. Anda dapat memeriksa status server di sini, dan melihat apakah ada masalah yang diketahui.</p>
+        <h3 class="text-6xl font-bold mb-4">Status server</h3>
+        <div id="server-status"></div>
+    </div>
+    <div class="w-1/2 bg-gray-800">
+        <iframe src="https://bonicorepmmp.statuspage.io/" width="100%" height="1000"></iframe>
+    </div>
+</div>
+    <script>
+        // Replace with the IP address or domain name of the Minecraft server
+        const serverIP = 'Luckynetwork.net';
+
+        // Find the div element for the server status
+        const statusDiv = document.getElementById('server-status');
+
+        // Make an HTTP GET request to the API
+        const apiURL = `https://mcapi.us/server/status?ip=${serverIP}`;
+        fetch(apiURL)
+          .then(response => response.json())
+          .then(data => {
+            // Check if the server is online
+            if (data.online) {
+              const statusInfo = `
+                <p class="text-2xl mb-4 font-light">[🟢] Server sedang online</p>
+                <p class="text-2xl mb-4 font-light">[👤] Pemain online: ${data.players.now} / ${data.players.max}</p>
+              `;
+              // Set the server status information in the div
+              statusDiv.innerHTML = statusInfo;
+            } else {
+              statusDiv.innerHTML = '<p class="text-2xl mb-4 font-light">[🔴] Server sedang offline.</p>';
+            }
+          })
+          .catch(error => {
+            statusDiv.innerHTML = '<p>Gagal mengambil status server: ' + error + '</p>';
+          });
+    </script>
+</body>
+</html>
