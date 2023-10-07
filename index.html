@@ -42,7 +42,7 @@
         const statusDiv = document.getElementById('server-status');
 
         // Make an HTTP GET request to the API
-        const apiURL = `https://mcapi.us/server/status?ip=${serverIP}&port=${serverPort}`;
+        const apiURL = `https://api.mcsrvstat.us/bedrock/simple/${serverIP}:${serverPort}`;
         fetch(apiURL)
           .then(response => response.json())
           .then(data => {
@@ -50,7 +50,7 @@
             if (data.online) {
               const statusInfo = `
                 <p class="text-xl mb-4 font-light">[🟢] Server sedang online</p>
-                <p class="text-xl mb-4 font-light">[👤] Pemain online: ${data.players.now} / ${data.players.max}</p>
+                <p class="text-xl mb-4 font-light">[👤] Pemain online: ${data.players.online} / ${data.players.max}</p>
               `;
               // Set the server status information in the div
               statusDiv.innerHTML = statusInfo;
