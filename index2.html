@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Server BoniCore PMMP</title>
+    <meta property="og:title" content="Status Server BoniCore PMMP" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://status.bonicore.my.id/" />
+    <meta property="og:image" content="https://status.bonicore.my.id/assets/logo.png" />
+    <meta property="og:description" content="Status Server BoniCore (https://status.bonicore.my.id/)" />
+    <meta name="theme-color" content="#FF0000">
+    <script src="https://cdn.tailwindcss.com/"></script>
+    <meta name="twitter:card" content="summary_large_image">
+    <style>
+        /* Custom styles here */
+        .center-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body class="bg-slate-800">
+<div class="center-content">
+    <div class="w-1/2 bg-gray-900 p-8 text-white">
+        <h1 class="text-4xl font-bold mb-4">Status <br>BoniCore</h1>
+        <p class="text-xl mb-4 font-light">Ini adalah halaman status untuk server BoniCore. Anda dapat memeriksa status server di sini, dan melihat apakah ada masalah yang diketahui.</p>
+        <p class="text-base mb-4 font-light">Ada masalah? kontak email<a href="mailto:help@bonicore.my.id"> help@bonicore.my.id</a> dan kami akan membantu anda</p>
+        <h3 class="text-4xl font-bold mb-4">Status<br> Server</h3>
+        <div id="server-status"></div>
+    </div>
+    <div class="w-1/2 bg-gray-800">
+        <iframe src="https://bonicorepmmp.statuspage.io/" width="100%" height="1000"></iframe>
+    </div>
+</div>
+    <script>
+    // Replace with the IP address or domain name of the Bedrock server
+    const serverIP = 'mc.bonicore.my.id:9033';
+
+    // Find the div element for the server status
+    const statusDiv = document.getElementById('server-status');
+
+    // Make an HTTP GET request to the API
+    const apiURL = `https://api.mcstatus.io/v2/status/bedrock/${serverIP}`;
+    fetch(apiURL)
+      .then(response => response.json())
+      .then(data => {
+        // Check if the server is online
+        if (data.online) {
+          const statusInfo = `
+            <p class="text-xl mb-4 font-light">[🟢] Server sedang online</p>
+            <p class="text-xl mb-4 font-light">[👤] Pemain online: ${data.players.online} / ${data.players.max}</p>
+          `;
+          // Set the server status information in the div
+          statusDiv.innerHTML = statusInfo;
+
+          // Send a POST request to the uptime monitoring service with 'no-cors' mode
+          const heartbeatURL = 'https://uptime.betterstack.com/api/v1/heartbeat/YSjmWiRMSMkqJf6tHDsPV2dM';
+          fetch(heartbeatURL, { method: 'POST', mode: 'no-cors' })
+            .then(response => {
+              if (response.status === 200) {
+                console.log('Heartbeat sent successfully.');
+              } else {
+                console.error('Failed to send heartbeat. Status:', response.status);
+              }
+            })
+            .catch(error => {
+              console.error('Error sending heartbeat:', error);
+            });
+        } else {
+          statusDiv.innerHTML = '<p class="text-xl mb-4 font-light">[🔴] Server sedang offline.</p>';
+        }
+      })
+      .catch(error => {
+        statusDiv.innerHTML = `<p>Gagal mengambil status server: ${error.message}</p>`;
+      });
+</script>
+
+
+
+</body>
+</html>
