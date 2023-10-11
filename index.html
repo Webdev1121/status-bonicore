@@ -41,46 +41,42 @@
     // Find the div element for the server status
     const statusDiv = document.getElementById('server-status');
 
-    // Make an HTTP GET request to the API
-    const apiURL = `https://api.mcstatus.io/v2/status/bedrock/${serverIP}`;
-    fetch(apiURL)
-      .then(response => response.json())
-      .then(data => {
+    // Make an HTTP GET request to the API using JSONP
+    const apiURL = `https://api.mcstatus.io/v2/status/bedrock/${serverIP}?jsonp=statusCallback`;
+
+    // Define the callback function to handle the response
+    function statusCallback(data) {
         // Check if the server is online
         if (data.online) {
-          const statusInfo = `
-            <p class="text-xl mb-4 font-light">[🟢] Server sedang online</p>
-            <p class="text-xl mb-4 font-light">[👤] Pemain online: ${data.players.online} / ${data.players.max}</p>
-          `;
-          // Set the server status information in the div
-          statusDiv.innerHTML = statusInfo;
+            const statusInfo = `
+                <p class="text-xl mb-4 font-light">[🟢] Server sedang online</p>
+                <p class="text-xl mb-4 font-light">[👤] Pemain online: ${data.players.online} / ${data.players.max}</p>
+            `;
+            // Set the server status information in the div
+            statusDiv.innerHTML = statusInfo;
 
-          // If the server is online, send a POST request to the uptime monitoring API
-          const postURL = 'https://uptime.betterstack.com/api/v1/heartbeat/YSjmWiRMSMkqJf6tHDsPV2dM';
-          fetch(postURL, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
-            .then(response => {
-              if (response.ok) {
-                console.log('Uptime POST request successful');
-              } else {
-                console.error('Uptime POST request failed');
-              }
+            // If the server is online, send a GET request to the uptime monitoring API
+            const getURL = 'https://uptime.betterstack.com/api/v1/heartbeat/YSjmWiRMSMkqJf6tHDsPV2dM';
+            fetch(getURL, {
+                method: 'GET',
             })
-            .catch(error => {
-              console.error('Failed to send Uptime POST request:', error);
-            });
+                .then(response => {
+                    console.log('Uptime GET request successful');
+                })
+                .catch(error => {
+                    console.error('Failed to send Uptime GET request:', error);
+                });
         } else {
-          statusDiv.innerHTML = '<p class="text-xl mb-4 font-light">[🔴] Server sedang offline.</p>';
+            statusDiv.innerHTML = '<p class="text-xl mb-4 font-light">[🔴] Server sedang offline.</p>';
         }
-      })
-      .catch(error => {
-        statusDiv.innerHTML = `<p>Gagal mengambil status server: ${error.message}</p>`;
-      });
+    }
+
+    // Create a script element to load the JSONP data
+    const script = document.createElement('script');
+    script.src = apiURL;
+    document.head.appendChild(script);
 </script>
+
 
 </body>
 </html>
