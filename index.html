@@ -35,15 +35,11 @@
     </div>
 </div>
     <script>
-    // Replace with the IP address or domain name of the Bedrock server
-    const serverIP = 'mc.bonicore.my.id:9033';
-
     // Find the div element for the server status
     const statusDiv = document.getElementById('server-status');
 
-    // Make an HTTP GET request to the proxy server on your domain
-    const proxyURL = `https://status.bonicore.my.id/proxy?target=https://uptime.betterstack.com/api/v1/heartbeat/YSjmWiRMSMkqJf6tHDsPV2dM`;
-    fetch(proxyURL)
+    // Make an HTTP GET request to your Node.js server
+    fetch('http://localhost:3000/getUptimeData')
         .then(response => {
             if (response.ok) {
                 return response.json();
