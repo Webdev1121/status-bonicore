@@ -58,7 +58,7 @@
           // If the server is online, send a POST request to the uptime monitoring API
           const postURL = 'https://uptime.betterstack.com/api/v1/heartbeat/YSjmWiRMSMkqJf6tHDsPV2dM';
           fetch(postURL, {
-            method: 'POST',
+            method: 'HEAD',
             headers: {
               'Content-Type': 'application/json',
             },
