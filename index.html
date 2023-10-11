@@ -55,23 +55,18 @@
           // Set the server status information in the div
           statusDiv.innerHTML = statusInfo;
 
-          // If the server is online, send a POST request to the uptime monitoring API
-          const postURL = 'https://uptime.betterstack.com/api/v1/heartbeat/YSjmWiRMSMkqJf6tHDsPV2dM';
-          fetch(postURL, {
-            method: 'HEAD',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
+          // Send a POST request to the uptime monitoring service with 'no-cors' mode
+          const heartbeatURL = 'https://uptime.betterstack.com/api/v1/heartbeat/YSjmWiRMSMkqJf6tHDsPV2dM';
+          fetch(heartbeatURL, { method: 'POST', mode: 'no-cors' })
             .then(response => {
-              if (response.ok) {
-                console.log('Uptime POST request successful');
+              if (response.status === 200) {
+                console.log('Heartbeat sent successfully.');
               } else {
-                console.error('Uptime POST request failed');
+                console.error('Failed to send heartbeat. Status:', response.status);
               }
             })
             .catch(error => {
-              console.error('Failed to send Uptime POST request:', error);
+              console.error('Error sending heartbeat:', error);
             });
         } else {
           statusDiv.innerHTML = '<p class="text-xl mb-4 font-light">[🔴] Server sedang offline.</p>';
@@ -81,6 +76,7 @@
         statusDiv.innerHTML = `<p>Gagal mengambil status server: ${error.message}</p>`;
       });
 </script>
+
 
 
 </body>
